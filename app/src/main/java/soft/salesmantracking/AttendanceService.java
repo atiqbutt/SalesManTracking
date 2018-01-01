@@ -58,6 +58,7 @@ public class AttendanceService extends Service {
     boolean isuploadCheckIn, isDistanceOnCheckIn, isClear, isSendCurrentLocation;
 
     SimpleDateFormat dateFormat1;
+    String s="";
 
 
     @Nullable
