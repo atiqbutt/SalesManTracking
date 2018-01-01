@@ -1,0 +1,93 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="@color/cast_expanded_controller_ad_container_white_stripe_color">-->
+
+    <!--<soft.salesmantracking.DelayAutoCompleteTextView-->
+        <!--android:id="@+id/geo_autocomplete"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:imeOptions="flagNoExtractUi|actionSearch"-->
+        <!--android:inputType="textCapSentences"-->
+
+
+        <!--android:hint="@string/map_geo_search_input_hint"-->
+
+        <!--android:layout_marginEnd="35dp"-->
+        <!--android:layout_marginRight="35dp"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:layout_marginBottom="4dp"-->
+        <!--android:padding="10dp"-->
+        <!--android:dropDownWidth="fill_parent"-->
+
+        <!--/>-->
+    <!--&lt;!&ndash;android:textColor="@color/header_text_color"&ndash;&gt;-->
+    <!--<ImageView-->
+        <!--android:id="@+id/geo_autocomplete_clear"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@android:drawable/ic_delete"-->
+
+        <!--android:layout_gravity="center_vertical|end"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_marginEnd="12dp"-->
+        <!--android:layout_marginRight="12dp"-->
+
+        <!--/>-->
+    <!--&lt;!&ndash;android:contentDescription="@string/map_list_header_txt"&ndash;&gt;-->
+<!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginTop="45dp">-->
+    <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--android:id="@+id/map"-->
+        <!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+
+         <!--/>-->
+<!--</LinearLayout>-->
+<!--</FrameLayout>-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:hint="Search Location Here" />
+
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+
+            android:text="Search" />
+        <!--android:onClick="onMapSearch"-->
+
+    </LinearLayout>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
+
+</LinearLayout>

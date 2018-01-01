@@ -1,0 +1,144 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="#e6e6e6">
+
+    <!--<br.com.mauker.materialsearchview.MaterialSearchView-->
+        <!--android:id="@+id/search_view"-->
+        <!--android:layout_width="350dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_marginLeft="17dp"-->
+        <!--style="@style/MaterialSearchViewStyle"/>-->
+
+    <include
+        layout="@layout/custom_action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:id="@+id/actionbar"
+        ></include>
+
+
+    <fragment android:id="@+id/place_autocomplete_fragmentM"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/actionbar"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        xmlns:android="http://schemas.android.com/apk/res/android" />
+
+    <fragment
+        android:id="@+id/googleMapf"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_above="@+id/relativeLayout3"
+        android:layout_below="@+id/place_autocomplete_fragmentM">
+
+
+
+    </fragment>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/bottombar"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/relativeLayout3"
+        tools:ignore="OnClick">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Traveled Distance:"
+            android:layout_margin="20dp"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:id="@+id/TraveledDistance"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Allowance:"
+            android:id="@+id/AllowanceRate"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="15dp"
+            android:textSize="16sp"
+            android:textColor="#FFF"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/TraveledDistance"
+            android:text="Distance"
+            android:textColor="#000"
+            android:id="@+id/CalDistance"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/AllowanceRate"
+            android:layout_alignParentBottom="true"
+            android:text="Distance"
+            android:layout_margin="15dp"
+            android:textColor="#FFF"
+            android:id="@+id/CalAllowance"
+            android:layout_marginTop="20dp"/>
+
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/CheckInTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="27dp"
+        android:textColor="#000"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:layout_marginRight="27dp"
+        android:layout_marginTop="22dp"
+        android:text="TextView"
+        android:layout_below="@+id/googleMapf"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/CheckInTime"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/CheckInTime"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="15dp"
+        android:text="TextView" />
+    <!--<fragment-->
+        <!--android:id="@+id/place_autocomplete_fragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"-->
+        <!--/>-->
+
+
+
+
+    <!--<TextView-->
+        <!--android:id="@+id/search"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="bottom"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="#ff058fff"-->
+        <!--android:paddingTop="5dp"-->
+        <!--android:hint="Search"-->
+        <!--android:paddingBottom="5dp"-->
+        <!--android:textColor="#ffffffff"-->
+        <!--android:paddingLeft="5dp"-->
+        <!--android:paddingRight="5dp" />-->
+</RelativeLayout>
+

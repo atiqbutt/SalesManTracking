@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#196AA2"
+    android:id="@+id/custom_action_bar">
+
+    <ImageView
+        android:layout_width="35dp"
+        android:layout_height="25dp"
+        android:layout_margin="10dp"
+        android:id="@+id/menu_dots"
+        android:padding="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/menudot"/>
+
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/refreshinfobtn"
+        android:layout_marginRight="23dp"
+        android:layout_marginEnd="23dp"
+        android:id="@+id/refreshInfo"
+        android:onClick="refreshClick"
+        android:layout_alignTop="@+id/menu_dots"
+        android:layout_toLeftOf="@+id/menu_dots"
+        android:layout_toStartOf="@+id/menu_dots" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp"
+        android:text="Username"
+        android:textColor="#FFF"
+        android:textSize="18sp"
+        android:id="@+id/Title"
+        android:textStyle="bold"/>
+</RelativeLayout>

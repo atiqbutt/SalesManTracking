@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/ListMap"
+            android:icon="@drawable/marker_b"
+            android:title="Map" />
+        <item
+            android:id="@+id/ListAttendance"
+            android:icon="@drawable/attendance1"
+            android:title="Attendance" />
+        <item
+            android:id="@+id/ListDetails"
+            android:icon="@drawable/details"
+            android:title="Details" />
+
+    </group>
+
+
+
+</menu>

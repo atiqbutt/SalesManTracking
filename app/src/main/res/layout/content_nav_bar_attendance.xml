@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#239B56"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="soft.salesmantracking.NavBarAttendance"
+    tools:showIn="@layout/app_bar_nav_bar_attendance">
+
+
+    <Button
+        android:id="@+id/AttendanceBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_green_light"
+        android:text="Check In"
+        android:textSize="16sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="14dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="#239B56" />
+
+    <Button
+        android:id="@+id/CheckOut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_dark"
+        android:text="Check Out"
+        android:textSize="16sp"
+        android:layout_above="@+id/relativeLayout2"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/CheckInTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="text view"
+        android:textSize="16sp"
+        android:layout_below="@id/AttendanceBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+         />
+
+
+    <!--<DigitalClock-->
+        <!--android:id="@+id/simpleDigitalClock"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:backgroundTint="#239B56"-->
+        <!--android:background="#239B56"-->
+        <!--android:padding="50dp"-->
+        <!--android:layout_above="@+id/CheckOutTime"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginBottom="44dp"-->
+        <!--android:textSize="50dp"/>-->
+
+    <TextView
+        android:id="@+id/myText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DigitalClock"
+        android:textSize="40sp"
+        android:layout_above="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:id="@+id/CheckOutTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@+id/CheckOut"
+        android:text="text view"
+        android:textSize="16sp"/>
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="#e6e6e6"
+        android:id="@+id/relativeLayout2">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textColor="#000"
+            android:layout_margin="10dp"
+            android:text="Distance Traveled: "
+            android:textSize="16sp"
+            android:id="@+id/Distance"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textColor="#000"
+            android:layout_margin="10dp"
+            android:text="Allowance: "
+            android:layout_below="@id/Distance"
+            android:textSize="16dp"
+            android:id="@+id/Allowance"
+            android:textStyle="bold"/>
+
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/Distance"
+            android:text="sdadsd"
+            android:id="@+id/DistanceText"
+            android:textSize="14sp"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Distance"
+            android:layout_margin="10dp"
+            android:id="@+id/AllowanceText"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/Allowance"
+            android:text="sdas"/>
+
+    </RelativeLayout>
+
+
+
+
+
+
+</RelativeLayout>

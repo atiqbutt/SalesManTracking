@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00515f"
+    tools:context="soft.salesmantracking.Navigations">
+
+
+
+    <!--<ImageView-->
+        <!--android:id="@+id/centerImage"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:background="#000" />-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/button3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@+id/button5"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:layout_toLeftOf="@+id/centerImage"-->
+
+        <!--android:layout_toStartOf="@+id/centerImage"-->
+        <!--android:background="@drawable/background2"-->
+        <!--android:src="@drawable/attendance1" />-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/button4"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@+id/button5"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:onClick="CurrentLocation"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:layout_toEndOf="@+id/centerImage"-->
+        <!--android:layout_toRightOf="@+id/centerImage"-->
+        <!--android:background="#4f9ccb"-->
+        <!--android:src="@drawable/currentlocation"-->
+        <!--android:text="Button" />-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/button5"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="150dp"-->
+        <!--android:layout_alignEnd="@+id/centerImage"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignRight="@+id/centerImage"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:background="#8cb4e1"-->
+        <!--android:src="@drawable/searchlocatoin"-->
+        <!--android:text="Button"-->
+        <!--android:onClick="SearchLocation"/>-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/button6"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:onClick="AddLocation"-->
+        <!--android:layout_height="150dp"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_below="@+id/button4"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:layout_toEndOf="@+id/button5"-->
+        <!--android:layout_toRightOf="@+id/button5"-->
+        <!--android:background="#477fc2"-->
+        <!--android:src="@drawable/addlocation"-->
+        <!--android:text="Button" />-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/button7"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_below="@+id/button5"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:background="@drawable/background2"-->
+        <!--android:src="@drawable/details"-->
+        <!--android:text="Button" />-->
+
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="soft.salesmantracking.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+</RelativeLayout>

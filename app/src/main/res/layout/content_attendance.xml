@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="soft.salesmantracking.Attendance"
+    tools:showIn="@layout/app_bar_attendance">
+
+
+    <!--<EditText-->
+        <!--android:id="@+id/editTextnav"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="4"-->
+
+        <!--android:hint="Search Location Here"-->
+        <!--android:layout_alignBaseline="@+id/search_button"-->
+        <!--android:layout_alignBottom="@+id/search_button"-->
+        <!--android:layout_toLeftOf="@+id/search_button"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true" />-->
+
+
+    <!--<Button-->
+        <!--android:id="@+id/search_buttonnav"-->
+        <!--android:layout_width="70dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="0.3"-->
+        <!--android:onClick="onMapSearchNav"-->
+
+        <!--android:background="@drawable/places_ic_search"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true" />-->
+
+    <fragment
+        android:id="@+id/googleMapnav"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_marginTop="50dp">
+
+
+
+
+
+
+    </fragment>
+
+    <fragment android:id="@+id/place_autocomplete_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        xmlns:android="http://schemas.android.com/apk/res/android" />
+
+
+</RelativeLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/places_ic_search"
+        android:showAsAction="always"
+        android:actionViewClass="android.widget.SearchView"
+        android:title="Search"
+        tools:ignore="AppCompatResource" />
+    <!-- Settings, should always be in the overflow -->
+
+
+
+</menu>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "246882749110",
+    "firebase_url": "https://swma-c5f2d.firebaseio.com",
+    "project_id": "swma-c5f2d",
+    "storage_bucket": "swma-c5f2d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246882749110:android:c1c98a2485924d4c",
+        "android_client_info": {
+          "package_name": "soft.salesmantracking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "246882749110-rpinit5hb97vavfncmj0a9doc2klnrla.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "soft.salesmantracking",
+            "certificate_hash": "76d66e7e9adbd698839607d979059a5db28eedc2"
+          }
+        },
+        {
+          "client_id": "246882749110-4pjp3tjoiebchfb3jvfk11270nho1hd9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAuwlCmre8GMtglx9OsNKKHoAbtBAehM0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "246882749110-4pjp3tjoiebchfb3jvfk11270nho1hd9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

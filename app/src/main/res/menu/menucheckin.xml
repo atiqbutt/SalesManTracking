@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/inCheckin"
+        android:title="Check In"></item>
+    <item android:id="@+id/inMarkList"
+        android:title="Marked Places"></item>
+
+    <item android:id="@+id/inTagCurrent"
+        android:title="Mark Current Location"></item>
+    <item android:id="@+id/inPath"
+        android:title="Traveled Path"></item>
+</menu>

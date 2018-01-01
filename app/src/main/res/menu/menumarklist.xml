@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/markMarkedList"
+        android:title="Marked Places"/>
+    <item android:id="@+id/markTagCurrent"
+        android:title="Mark Current Location"></item>
+    <item android:id="@+id/markPath"
+        android:title="Traveled Path"></item>
+</menu>
