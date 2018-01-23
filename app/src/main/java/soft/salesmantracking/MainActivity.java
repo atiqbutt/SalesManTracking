@@ -119,7 +119,6 @@ import java.util.TimerTask;
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
 
-//import com.ahmadrosid.lib.drawroutemap.DrawRouteMaps;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -132,17 +131,13 @@ public class MainActivity extends AppCompatActivity implements
     static final Integer LOCATION = 0x1;
     double startlongi, endlongi;
     double startlati, endlati, testLat,testLng;
-    TextView textView, distanceText, allowanceText, title;
+    TextView  distanceText, allowanceText, title;
     LatLng latLng;
-    double dLat, dLong;
     GoogleMap mGoogleMap;
     SupportMapFragment mFragment;
     Marker currLocationMarker;
-    LocationManager locationManager;
     Location mLastLocation;
-    ArrayList<LatLng> markerPoints;
     String location;
-    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     boolean isOfficeRadius = false;
@@ -162,15 +157,9 @@ public class MainActivity extends AppCompatActivity implements
     public static final String UPDATE_Distance_At_Tour_URL = "http://swmapplication.com/API/tourUpdateDistance";
     public static final String SEND_COORINATES_URL = "http://www.swmapplication.com/API/receiveTraveledCoordinates";
 
-    Handler handler;
-
     private static final int CAMERA_REQUEST = 1888;
     ImageView dots;
     ACProgressFlower dialog;
-
-
-
-    private BroadcastReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,40 +194,13 @@ public class MainActivity extends AppCompatActivity implements
         FirebaseMessaging.getInstance().subscribeToTopic("test");
         FirebaseInstanceId.getInstance().getToken();
 
-        /*List<CheckinCheckOutTable> data = CheckinCheckOutTable.listAll(CheckinCheckOutTable.class);
-        Toast.makeText(this, String.valueOf(data.size()), Toast.LENGTH_SHORT).show();
-        for(CheckinCheckOutTable obj : data){
-            Toast.makeText(this, String.valueOf(obj.getId()), Toast.LENGTH_SHORT).show();
-        }*/
 
-        //Toast.makeText(this,preferences.getString("TourId", ""),Toast.LENGTH_SHORT).show();
+
         UpdateToken(FirebaseInstanceId.getInstance().getToken());
         distanceText = (TextView) findViewById(R.id.CalDistance);
         allowanceText = (TextView) findViewById(R.id.CalAllowance);
         dots = (ImageView) findViewById(R.id.menu_dots);
         title = (TextView) findViewById(R.id.Title);
-        /*if(isMyServiceRunning(CurrentPositionService.class)){
-            Toast.makeText(this, "Current Position is Runing", Toast.LENGTH_SHORT).show();
-        }if(isMyServiceRunning(TrackingService.class)){
-            Toast.makeText(this, "Tracking Position is Runing", Toast.LENGTH_SHORT).show();
-        }*/
-
-
-        /*List<TraveledDistance> informations = TraveledDistance.listAll(TraveledDistance.class);
-        if(informations.size() == 0){
-            Toast.makeText(this, "No Stay", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            double total = 0;
-            for(TraveledDistance obj : informations){
-                //String Msg = obj.startTime + "\n" + obj.EndTime + "\n" + obj.distance + "\n" + obj.isSend;
-
-                Toast.makeText(this, String.valueOf(obj.lat), Toast.LENGTH_SHORT).show();
-
-            }
-
-            //Toast.makeText(this, String.valueOf(total/1000), Toast.LENGTH_LONG).show();
-        }*/
 
 
         dialog = new ACProgressFlower.Builder(this)
@@ -254,12 +216,6 @@ public class MainActivity extends AppCompatActivity implements
         askForPermission(android.Manifest.permission.ACCESS_FINE_LOCATION,LOCATION);
         statusCheck();
 
-
-////        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-////        setSupportActionBar(mToolbar);
-////        Intent intent=new Intent("android.location.GPS_ENABLED_CHANGE");
-////        intent.putExtra("enabled", true);
-////        sendBroadcast(intent);
         try {
 
             mFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.googleMapf);
@@ -270,8 +226,6 @@ public class MainActivity extends AppCompatActivity implements
                 @Override
                 public void onPlaceSelected(Place place) {
 
-//                locationSearch = (EditText) findViewById(R.id.editTextnav);
-                    //place.getName().toString();
                     location = place.getAddress().toString();
 
 
@@ -289,8 +243,7 @@ public class MainActivity extends AppCompatActivity implements
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    //android.location.Address address = addressList.get(0);
-                    //LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
                     LatLng latLng = place.getLatLng();
                     mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(location));
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -315,20 +268,11 @@ public class MainActivity extends AppCompatActivity implements
                     LatLng origin = new LatLng(testLat,testLng);
                     LatLng dest = new LatLng(endlati,endlongi);
 
-//                DrawRouteMaps.getInstance(this)
-//                        .draw(origin, dest, mGoogleMap);
 //
-//
-//                LatLngBounds bounds = new LatLngBounds.Builder()
-//                        .include(origin)
-//                        .include(dest).build();
-//                Point displaySize = new Point(500,100);
-//                getWindowManager().getDefaultDisplay().getSize(displaySize);
-//                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, displaySize.x, 5000, 70));
 
                     String url = getUrl(origin, dest);
                     String Aurl = AgetUrl(origin, dest);
-                    //Log.d("onMapClick", url.toString());
+
                     MainActivity.FetchUrl FetchUrl = new MainActivity.FetchUrl();
                     MainActivity.AFetchUrl aFetchUrl = new MainActivity.AFetchUrl();
 
@@ -365,14 +309,10 @@ public class MainActivity extends AppCompatActivity implements
 
                                 }
                             });
-//        View view = snackbar.getView();
 
 
                     snackbar.setDuration(10000);
                     View sbView = snackbar.getView();
-//                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) sbView.getLayoutParams();
-//                params.gravity = Gravity.TOP;
-//                sbView.setLayoutParams(params);
                     TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
                     textView.setTextColor(Color.WHITE);
                     snackbar.show();
@@ -404,10 +344,6 @@ public class MainActivity extends AppCompatActivity implements
                         CheckinCheckOutTable attendance = CheckinCheckOutTable.findById(CheckinCheckOutTable.class, (long) 1);
                         PopupMenu popup = new PopupMenu(MainActivity.this,dots, Gravity.RIGHT);
 
-                        AttendanceData obj = AttendanceData.findById(AttendanceData.class, (long) 1);
-
-                        SimpleDateFormat dateFormat1 = new SimpleDateFormat("h:mm a");
-                        boolean IsEnableTime = false;
                         SimpleDateFormat day = new SimpleDateFormat("yyyy-MM-dd");
                         day.setTimeZone(TimeZone.getTimeZone("GMT+05"));
 
@@ -479,23 +415,15 @@ public class MainActivity extends AppCompatActivity implements
                                                     TraveledDistance.deleteAll(TraveledDistance.class);
                                                 }
                                                 if(haveNetworkConnection()){
-                                                    editor.putString("isSend","1");
-                                                    editor.apply();
-
-
 
 
                                                     if(preferences.getString("isTour","").equalsIgnoreCase("1")){
-                                                    /*if(!preferences.getString("CheckInDay","").equalsIgnoreCase(dateFormat1.format(new Date()))){
-                                                        UploadTourCheckIn(checkInTime);
-                                                        TourDistanceOnCheckIn();
-                                                    }*/
                                                         UploadTourCheckIn(checkInTime);
                                                         TourDistanceOnCheckIn();
 
                                                     }
                                                     else {
-                                                        if(!preferences.getString("CheckInDay","").equalsIgnoreCase(dateFormat1.format(new Date()))){
+                                                        if(!preferences.getString("CheckInDay","").equalsIgnoreCase(dateFormat1.format(new Date())) || obj.isSend ){
                                                             UploadCheckIn(checkInTime);
                                                             DistanceOnCheckIn();
                                                             //TraveledDistance.deleteAll(TraveledDistance.class);
@@ -580,7 +508,7 @@ public class MainActivity extends AppCompatActivity implements
 
                                                                     sendTime();
                                                                     String TourId = "";
-                                                                    //TraveledDistance.deleteAll(TraveledDistance.class);
+
                                                                     if(preferences.getString("isTour","").equalsIgnoreCase("1")){
                                                                         TourUpdateDistance();
                                                                         UploadTourCheckOut(checkOutTime);
@@ -762,19 +690,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
         );
 
-        /*final Handler handler = new Handler();
-        Runnable refresh = null;
-
-        final Runnable finalRefresh = refresh;
-        refresh = new Runnable() {
-            public void run() {
-                // Do something
-//                distanceAndAllowance();
-                Toast.makeText(MainActivity.this, "Refrshing...", Toast.LENGTH_SHORT).show();
-                handler.postDelayed(finalRefresh, 2000);
-            }
-        };
-        handler.post(refresh);*/
 
 
 
@@ -794,113 +709,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-   /* @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        menu.clear();
 
-        SimpleDateFormat dateFormat1 = new SimpleDateFormat("h:mm a");
-        boolean IsEnableTime = false;
-        String time = "4:00 AM";
-        try {
-            Date EnableTime = dateFormat1.parse(time);
-            if (dateFormat1.parse(dateFormat1.format(new Date())).after(EnableTime)) {
-                IsEnableTime = true;
-            }
-        } catch (Exception e) {
-
-        }
-
-        if (preferences.getBoolean("IsCheckOut", false) && !IsEnableTime) {
-
-            inflater.inflate(R.menu.menumarklist, menu);
-        } else if (preferences.getBoolean("IsCheckIn", false) && isOfficeRadius) {
-            inflater.inflate(R.menu.menucheckout, menu);
-
-        } else if(isOfficeRadius) {
-            editor.putString("CheckInTime", "");
-            editor.putString("CheclOutTime", "");
-            editor.putBoolean("IsCheckOut", false);
-            editor.putBoolean("IsCheckIn",false);
-            editor.apply();
-            inflater.inflate(R.menu.menucheckin, menu);
-            //Toast.makeText(this,"3",Toast.LENGTH_SHORT).show();
-
-        }
-        else {
-            inflater.inflate(R.menu.menumarklist, menu);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // action with ID action_refresh was selected
-            case R.id.inCheckin:
-                editor.putBoolean("IsCheckIn", true);
-                editor.putBoolean("IsCheckOut", false);
-                editor.apply();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String checkInTime = dateFormat.format(new Date());
-
-                editor.putString("CheckInTime", checkInTime);
-                editor.apply();
-
-                UploadCheckIn(checkInTime);
-                DistanceOnCheckIn();
-
-                startService(new Intent(this, CurrentPositionService.class));
-                startService(new Intent(this, TrackingService.class));
-
-                break;
-            // action with ID action_settings was selected
-            case R.id.inMarkList:
-                startActivity(new Intent(this,ListOfMarkedPlaces.class));
-                break;
-            case R.id.outMarkList:
-                startActivity(new Intent(this,ListOfMarkedPlaces.class));
-                break;
-            case R.id.outCheckout:
-
-                SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String checkOutTime = dateFormat1.format(new Date());
-                editor.putBoolean("IsCheckIn", false);
-                editor.putBoolean("IsCheckOut", true);
-                editor.putString("CheckOutTime", checkOutTime);
-                editor.apply();
-
-                List<TraveledDistance> distances = TraveledDistance.listAll(TraveledDistance.class);
-                TraveledDistance.deleteAll(TraveledDistance.class);
-                UploadCheckOut(checkOutTime);
-                //updateDistance();
-                stopService(new Intent(this, CurrentPositionService.class));
-                stopService(new Intent(this, TrackingService.class));
-                break;
-            case R.id.markMarkedList:
-                startActivity(new Intent(this,ListOfMarkedPlaces.class));
-                break;
-            case R.id.inTagCurrent:
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                break;
-            case R.id.outTagCurrent:
-                Intent cameraIntent1 = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent1, CAMERA_REQUEST);
-
-                break;
-            case R.id.markTagCurrent:
-                Intent cameraIntent2 = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent2, CAMERA_REQUEST);
-
-                break;
-            default:
-                break;
-        }
-
-
-        return true;
-    }*/
 
     @Override
     public void onMapReady(GoogleMap gMap) {
@@ -994,10 +803,6 @@ public class MainActivity extends AppCompatActivity implements
                                     checkinCheckOutTable.markedPlcaeId = addLocaton.getId();
                                     checkinCheckOutTable.save();
 
-                                    /*MarkerOptions markerOptions = new MarkerOptions();
-                                    markerOptions.position(new LatLng(addLocaton.LocationLat,addLocaton.LocationLng));
-                                    markerOptions.title(addLocaton.LocationName);
-                                    mGoogleMap.addMarker(markerOptions);*/
                                 }
                             }catch (Exception e){
                                 Toast.makeText(MainActivity.this, "Capture From Simple Camera", Toast.LENGTH_SHORT).show();
@@ -1028,177 +833,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-//    public boolean isNetworkAvaliable(final Context ctx) {
-//        ConnectivityManager connectivityManager = (ConnectivityManager) ctx
-//                .getSystemService(Context.CONNECTIVITY_SERVICE);
-//        if ((connectivityManager
-//                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE) != null && connectivityManager
-//                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED)
-//                || (connectivityManager
-//                .getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null && connectivityManager
-//                .getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-//                .getState() == NetworkInfo.State.CONNECTED)) {
-//
-//            EditText locationSearch = (EditText) findViewById(R.id.editTextnav);
-//            location = locationSearch.getText().toString();
-//            List<android.location.Address> addressList = null;
-//
-//            if (!TextUtils.isEmpty(locationSearch.getText().toString())) {
-//                Geocoder geocoder = new Geocoder(this);
-//                try {
-//
-//                    addressList = geocoder.getFromLocationName(location, 1);
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                android.location.Address address = addressList.get(0);
-//                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-//                mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(location));
-//                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-//
-//
-//
-//
-//
-//                endlati = address.getLatitude();
-//                endlongi = address.getLongitude();
-//
-//                Location startPoint = new Location("locationA");
-//
-//                startPoint.setLatitude(testLat);
-//                startPoint.setLongitude(testLng);
-//
-//
-//                Location endPoint = new Location("locationA");
-//                endPoint.setLatitude(endlati);
-//                endPoint.setLongitude(endlongi);
-//
-//                LatLng origin = new LatLng(testLat,testLng);
-//                LatLng dest = new LatLng(endlati,endlongi);
-//
-////                DrawRouteMaps.getInstance(this)
-////                        .draw(origin, dest, mGoogleMap);
-////
-////
-////                LatLngBounds bounds = new LatLngBounds.Builder()
-////                        .include(origin)
-////                        .include(dest).build();
-////                Point displaySize = new Point(500,100);
-////                getWindowManager().getDefaultDisplay().getSize(displaySize);
-////                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, displaySize.x, 5000, 70));
-//
-//                String url = getUrl(origin, dest);
-//                //Log.d("onMapClick", url.toString());
-//                FetchUrl FetchUrl = new FetchUrl();
-//
-//                // Start downloading json data from Google Directions API
-//                FetchUrl.execute(url);
-//
-//                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
-//                mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(12));
-//
-//
-//                double distance = startPoint.distanceTo(endPoint) / 1000;
-//
-//                NumberFormat nf = NumberFormat.getInstance();
-//                nf.setMaximumFractionDigits(1); // set as you need
-//                String myStringmax = nf.format(distance);
-//                // int finald = (int) distance;
-//                InputMethodManager imm = (InputMethodManager) getSystemService(
-//                        Activity.INPUT_METHOD_SERVICE);
-//                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-//
-////
-//
-//
-//                Snackbar snackbar = Snackbar
-//                        .make(findViewById(android.R.id.content), "Distance is  " + myStringmax + " K.m ", Snackbar.LENGTH_LONG)
-//                        .setAction("Save", new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//
-//                                saveLocation(location,endlati,endlongi);
-//                                Toast.makeText(ctx, "Saved Successfully.", Toast.LENGTH_SHORT).show();
-//
-//                            }
-//                        });
-////        View view = snackbar.getView();
-//
-//
-//                snackbar.setDuration(10000);
-//                View sbView = snackbar.getView();
-////                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) sbView.getLayoutParams();
-////                params.gravity = Gravity.TOP;
-////                sbView.setLayoutParams(params);
-//                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-//                textView.setTextColor(Color.WHITE);
-//                snackbar.show();
-//
-//            }
-//
-//
-//            else {
-//
-//                Toast.makeText(ctx, "Enter Location..", Toast.LENGTH_SHORT).show();
-//
-////                Snackbar snackbar = Snackbar
-////                        .make(findViewById(android.R.id.content), "Enter Location", Snackbar.LENGTH_LONG);
-////                snackbar.setDuration(10000);
-////                View sbView = snackbar.getView();
-////                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) sbView.getLayoutParams();
-////                params.gravity = Gravity.TOP;
-////                sbView.setLayoutParams(params);
-////                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-////                textView.setTextColor(Color.WHITE);
-////                snackbar.show();
-//
-//            }
-//            return true;
-//
-//        } else {
-//            Snackbar snackbar = Snackbar
-//                    .make(findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG);
-////        View view = snackbar.getView();
-//
-//
-//            snackbar.setDuration(10000);
-//            View sbView = snackbar.getView();
-////            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) sbView.getLayoutParams();
-////            params.gravity = Gravity.TOP;
-////            sbView.setLayoutParams(params);
-//            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-//            textView.setTextColor(Color.WHITE);
-//            snackbar.show();
-//            return false;
-//        }
-//    }
-
-    public void onMapSearchNav(View view) {
-
-        /*EditText locationSearch = (EditText) findViewById(R.id.editTextnav);
-
-        LatLng dest = getLatitude(this,locationSearch.getText().toString());
-        LatLng origin = new LatLng(testLat,testLng);
-
-        String url = getUrl(origin, dest);
-        //Log.d("onMapClick", url.toString());
-        FetchUrl FetchUrl = new FetchUrl();
-
-        // Start downloading json data from Google Directions API
-        FetchUrl.execute(url);
-
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
-        mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(12));*/
 
 
-        //isNetworkAvaliable(this);
-
-
-
-        // checkConnection();
-
-    }
 
 
     @Override
@@ -1378,18 +1014,6 @@ public class MainActivity extends AppCompatActivity implements
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{permission}, requestCode);
             }
 
-        } else {
-//            if(permission== android.Manifest.permission.CALL_PHONE){
-//                Intent callIntent = new Intent(Intent.ACTION_CALL);
-//                callIntent.setData(Uri.parse("tel:" + "{+92 333-6386454 }"));
-//                startActivity(callIntent);
-//            }
-//            else{
-//                Intent map = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=lahore leads university,lahore pakistan"));
-//                map.setPackage("com.google.android.apps.maps");
-//                startActivity(map);
-//            }
-            // Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1429,10 +1053,6 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    private void checkConnection() {
-        boolean isConnected = ConnectivityReceiver.isConnected();
-        showSnack(isConnected);
-    }
 
     private void showSnack(boolean isConnected) {
         String message;
@@ -1448,10 +1068,7 @@ public class MainActivity extends AppCompatActivity implements
             snackbar.show();
 
 
-            // Toast.makeText(this, "Distence is"+distance+"Km", Toast.LENGTH_SHORT).show();
 
-//            message = "Good! Connected to Internet";
-//            color = Color.WHITE;
         } else {
 
             Snackbar snackbar = Snackbar
@@ -1774,21 +1391,6 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-    public  LatLng getLatitude(Context context, String city) {
-        Geocoder geocoder = new Geocoder(context,context.getResources().getConfiguration().locale);
-        List<Address> addresses = null;
-        LatLng latLng = null;
-        try {
-            addresses = geocoder.getFromLocationName(city, 1);
-            Address address = addresses.get(0);
-            latLng = new LatLng(address.getLatitude(), address.getLongitude());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return latLng;
-    }
-
-
     public void saveLocation(String SearchLocation, double lat, double lng){
         AddLocaton addLocaton = new AddLocaton();
         addLocaton.LocationName = SearchLocation;
@@ -1871,54 +1473,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-
-                        editor.putString("isCheckInSend","1");
-                        editor.apply();
-
-
-//
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        editor.putString("isCheckInSend","0");
-                        editor.apply();
-                        //pDialog.hide();
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+05"));
-
-                map.put("day",dateFormat.format(new Date()));
-                map.put("checkIn", Time);
-                map.put("checkInLat",String.valueOf(testLat));
-                map.put("checkInLng",String.valueOf(testLng));
-                map.put("id", preferences.getString("userId", ""));
-
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
     }
 
 
@@ -1958,59 +1513,7 @@ public class MainActivity extends AppCompatActivity implements
                 });
 
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, CHECKOUT_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-
-                        editor.putString("isCheckOutSend","1");
-                        editor.apply();
-
-
-
-//
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        editor.putString("isCheckOutSend","0");
-                        editor.apply();
-                        //pDialog.hide();
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+05"));
-
-                String coordinates = preferences.getString("OfficeCoordinates","");
-                String separated[] = coordinates.split(",");
-                map.put("checkOut", Time);
-                map.put("auto", "No");
-                map.put("latitude", String.valueOf(testLat));
-                map.put("longitude", String.valueOf(testLng));
-                map.put("id", preferences.getString("userId", ""));
-
-                map.put("day",dateFormat.format(new Date()));
-
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
     }
 
 
@@ -2046,65 +1549,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, Tour_Check_In_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-
-                        editor.putString("isCheckInSend","1");
-                        editor.apply();
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            JSONObject jsonObject = jsonArray.getJSONObject(0);
-
-
-                        } catch (JSONException e) {
-
-
-                            e.printStackTrace();
-                        }
-
-
-//
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        editor.putString("isCheckInSend","0");
-                        editor.apply();
-                        //pDialog.hide();
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+05"));
-
-                map.put("day",dateFormat.format(new Date()));
-                map.put("checkIn", Time);
-                map.put("checkInLat",String.valueOf(testLat));
-                map.put("checkInLng",String.valueOf(testLng));
-                map.put("tour_id", preferences.getString("TourId", ""));
-                map.put("id", preferences.getString("userId", ""));
-
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
     }
 
 
@@ -2138,69 +1583,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, Tour_Check_Out_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-
-                        editor.putString("isCheckOutSend","1");
-                        editor.apply();
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            JSONObject jsonObject = jsonArray.getJSONObject(0);
-
-
-                        } catch (JSONException e) {
-
-
-                            e.printStackTrace();
-                        }
-
-
-//
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        editor.putString("isCheckOutSend","0");
-                        editor.apply();
-                        //pDialog.hide();
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+05"));
-
-                String coordinates = preferences.getString("OfficeCoordinates","");
-                String separated[] = coordinates.split(",");
-                map.put("checkOut", Time);
-                map.put("tour_id", preferences.getString("TourId", ""));
-                map.put("auto", "No");
-                map.put("latitude", String.valueOf(testLat));
-                map.put("longitude", String.valueOf(testLng));
-                map.put("id", preferences.getString("userId", ""));
-
-                map.put("day",dateFormat.format(new Date()));
-
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
     }
 
     public void DistanceOnCheckIn() {
@@ -2229,40 +1612,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, DISTANCE_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        //pDialog.hide();
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("id", preferences.getString("userId", ""));
-
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
     }
 
     public void TourDistanceOnCheckIn() {
@@ -2290,52 +1640,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, Distance_At_Tour_CheckIn_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            JSONObject jsonObject = jsonArray.getJSONObject(0);
-
-
-                        } catch (JSONException e) {
-
-
-                            e.printStackTrace();
-                        }
-
-
-//
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        //pDialog.hide();
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("id", preferences.getString("userId", ""));
-                map.put("tour_id", preferences.getString("TourId", ""));
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
     }
 
 
@@ -2440,118 +1745,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, Update_Info_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-
-
-                        try{
-                            JSONArray jsonArray = new JSONArray(response);
-                            JSONObject jsonObject = jsonArray.getJSONObject(0);
-
-                            String msg, coordinates, timeIn, timeOut, rate, currency, rateCurrency, username, isActive, isOutDoor;
-
-                            //Toast.makeText(LogIn.this,"true",Toast.LENGTH_SHORT).show();
-                            msg = jsonObject.getString("msg");
-                            if(msg.equalsIgnoreCase("true")){
-                                coordinates = jsonObject.getString("coordinates");
-                                timeIn = jsonObject.getString("time_in");
-                                timeOut = jsonObject.getString("time_out");
-                                username = jsonObject.getString("username");
-                                rateCurrency = jsonObject.getString("rate");
-                                isActive = jsonObject.getString("isActive");
-                                isOutDoor = jsonObject.getString("isOutdoor");
-                                String[] seperated = rateCurrency.split(" ");
-                                rate = seperated[0];
-                                currency = seperated[1];
-                                final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString("OfficeCoordinates",coordinates);
-                                editor.putString("OfficeTimeIn",timeIn);
-                                editor.putString("OfficeTimeOut",timeOut);
-                                editor.putString("rate",rate);
-                                editor.putString("currency",currency);
-                                editor.putString("username",username);
-                                editor.putString("isOutdoor",isOutDoor);
-                                editor.apply();
-                                dialog.dismiss();
-                                if(isActive.equalsIgnoreCase("1")){
-                                    editor.putString("isActive","1");
-                                    editor.apply();
-                                    stopService(new Intent(MainActivity.this, CurrentPositionService.class));
-                                    stopService(new Intent(MainActivity.this, TrackingService.class));
-                                    finish();
-                                    startActivity(new Intent(MainActivity.this,DeactiveScreen.class));
-
-                                }
-                                else {
-                                    editor.putString("isActive","0");
-                                    editor.apply();
-                                    Toast.makeText(MainActivity.this,"Profile Updated",Toast.LENGTH_LONG).show();
-                                    finish();
-                                    startActivity(new Intent(MainActivity.this,MainActivity.class));
-                                    overridePendingTransition(0,0);
-                                }
-                            }
-                            else {
-                                TraveledDistance.deleteAll(TraveledDistance.class);
-                                AddLocaton.deleteAll(AddLocaton.class);
-                                StayInformation.deleteAll(StayInformation.class);
-                                editor.putString("isActive","0");
-                                editor.putBoolean("ïsSignIn",false);
-                                editor.apply();
-                                stopService(new Intent(MainActivity.this, CurrentPositionService.class));
-                                stopService(new Intent(MainActivity.this, TrackingService.class));
-                                Toast.makeText(MainActivity.this,"Your Profile is Deleted",Toast.LENGTH_LONG).show();
-                                finish();
-                                startActivity(new Intent(MainActivity.this,LogIn.class));
-                            }
-
-
-
-
-
-                        }catch (JSONException e){
-
-                            // Toast.makeText(LogIn.this,"Json Error",Toast.LENGTH_SHORT).show();
-
-                            //Toast.makeText(LogIn.this,e.toString(),Toast.LENGTH_SHORT).show();
-
-                            e.printStackTrace();
-                        }
-
-
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        dialog.dismiss();
-                        Toast.makeText(MainActivity.this,"Connection Failed", Toast.LENGTH_LONG ).show();
-
-                    }
-                }){
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<String,String>();
-
-                map.put("id", preferences.getString("userId", ""));
-
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
     }
 
     public void UpdateToken(final String token){
@@ -2576,39 +1770,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, Update_token_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }){
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<String,String>();
-
-                map.put("lng", preferences.getString("userId", ""));
-                map.put("token", token);
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
     }
 
 
@@ -2679,42 +1841,7 @@ public class MainActivity extends AppCompatActivity implements
                         // handle error
                     }
                 });
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, Update_Location_Url,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-                        //Toast.makeText(CurrentPositionService.this,"Current Location Sended", Toast.LENGTH_LONG ).show();//error.toString()
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        //Toast.makeText(CurrentPositionService.this,error.toString(), Toast.LENGTH_LONG ).show();//error.toString()
-                        //pDialog.hide();
-                    }
-                }){
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<String,String>();
-
-                map.put("latitude",lat);
-                map.put("longitude",lng);
-                map.put("id",preferences.getString("userId",""));
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
-        requestQueue.add(stringRequest);*/
     }
 
 
@@ -2747,59 +1874,7 @@ public class MainActivity extends AppCompatActivity implements
                         // handle error
                     }
                 });
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, CLEAR_CHECKOUT_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-
-                        editor.putString("isCheckOutSend","1");
-                        editor.apply();
-
-
-
-//
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        editor.putString("isCheckOutSend","0");
-                        editor.apply();
-                        //pDialog.hide();
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+05"));
-
-                String coordinates = preferences.getString("OfficeCoordinates","");
-                String separated[] = coordinates.split(",");
-                map.put("checkOut", "");
-                map.put("auto", "");
-                map.put("latitude", "");
-                map.put("longitude", "");
-                map.put("id", preferences.getString("userId", ""));
-
-                map.put("day",dateFormat.format(new Date()));
-
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
     }
 
     public void edit_tour(final String tourId){
@@ -2824,45 +1899,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, EDIT_TOUR_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-
-                        *//*editor.putString("isCheckOutSend","1");
-                        editor.apply();*//*
-//
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-                       *//* editor.putString("isCheckOutSend","0");
-                        editor.apply();*//*
-                        //pDialog.hide();
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("id", preferences.getString("userId", ""));
-                map.put("tour_id", tourId);
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
 
     }
     private boolean isMyServiceRunning(Class<?> serviceClass) {

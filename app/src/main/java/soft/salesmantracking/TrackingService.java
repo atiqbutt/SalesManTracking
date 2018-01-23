@@ -66,6 +66,7 @@ public class TrackingService extends Service{
     public static final String LOGIN_URL = "http://www.swmapplication.com/API/stay_info";
     public static final String Marked_Location_URL = "http://www.swmapplication.com/API/sendMarkedLocations";
     public static final String Marked_Location_Stay_URL = "http://swmapplication.com/API/marked_stay_info";
+    public static final String DISTANCE_URL = "http://www.swmapplication.com/API/distanceAtCheckIn";
     Date StartTime, EndTime;
     String place;
     double stayedPlaceLatitude, stayedPlaceLongitude;
@@ -436,17 +437,6 @@ public class TrackingService extends Service{
             }
         }).start();
 
-        /*final boolean istrue = true;
-        //Toast.makeText(TrackingService.this,"start",Toast.LENGTH_SHORT).show();
-        //Log.e(TAG, "onCreate");
-        Date date = new Date();
-        long currentTime = date.getTime();
-        long diff = currentTime - StayStartTime;
-        int sec = (int)(diff/(1000));
-        if(sec > 1){
-            Toast.makeText(TrackingService.this,"Stayed",Toast.LENGTH_LONG).show();
-            //istrue[0] = false;
-        }*/
     }
 
     @Override
@@ -513,9 +503,7 @@ public class TrackingService extends Service{
         return haveConnectedWifi || haveConnectedMobile;
     }
 
-    public void print(String time){
-        Toast.makeText(TrackingService.this,time,Toast.LENGTH_SHORT).show();
-    }
+
 
 
     public void sendStayInfo(){

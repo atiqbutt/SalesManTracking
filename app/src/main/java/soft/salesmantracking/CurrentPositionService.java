@@ -242,19 +242,7 @@ public class CurrentPositionService extends Service {
             Log.d(TAG, "gps provider does not exist " + ex.getMessage());
         }
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm a");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+05"));
-        final String time = preferences.getString("OfficeTimeOut","");
-        //Toast.makeText(CurrentPositionService.this,time,Toast.LENGTH_SHORT).show();
-        final Date[] EndTime = {null};
-        final Date[] CurrentTime = {null};
-        final boolean[] isEnd = {false};
-        final SharedPreferences.Editor editor = preferences.edit();
-        final SimpleDateFormat dateFormat1 = new SimpleDateFormat("h:mm a");
-        final SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd hh mm s");
-        dateFormat1.setTimeZone(TimeZone.getTimeZone("GMT+05"));
-        dateFormat2.setTimeZone(TimeZone.getTimeZone("GMT+05"));
-        //Toast.makeText(this, "Entering in Loop", Toast.LENGTH_SHORT).show();
+
         new Thread(new Runnable(){
             @Override
             public void run() {
@@ -271,6 +259,11 @@ public class CurrentPositionService extends Service {
 
 
                     if(haveNetworkConnection() && diff >= 2 * 60 * 1000){
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm a");
+                        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+                        dateFormat1.setTimeZone(TimeZone.getTimeZone("GMT+05"));
+                        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+05"));
+                        CheckinCheckOutTable checkinCheckOutTable = CheckinCheckOutTable.findById(CheckinCheckOutTable.class, (long) 1);
                         List<TraveledDistance> distances = TraveledDistance.listAll(TraveledDistance.class);
 
                         double totalDistance = 0, totalAllowance = 0;
@@ -304,91 +297,19 @@ public class CurrentPositionService extends Service {
                         }
                         previousTime = new Date().getTime();
                         sendTime();
-                    }
-
-                    try {
-                        //previousTime = preferences.getLong("isOnlineTime",0);
-
-
-                        EndTime[0] = dateFormat.parse(time);
-                        CurrentTime[0] = dateFormat.parse(dateFormat.format(new Date()));
-                        if(CurrentTime[0].after(EndTime[0]) || CurrentTime[0].equals(EndTime[0])){
-                            isEnd[0] = true;
-                        }
-                        else {
-                            //isEnd[0] = true;
-                            //Toast.makeText(CurrentPositionService.this, "Not Matched", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    catch (Exception e){
-                        //isEnd[0] = true;
-                        //Toast.makeText(CurrentPositionService.this, e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    /*if(isEnd[0] && preferences.getString("isTour","").equalsIgnoreCase("0")){
-                        SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        dayFormat.setTimeZone(TimeZone.getTimeZone("GMT+05"));
-                        String lastLongitude, lastLatitude;
-                        if(isNull){
-                            lastLatitude = preferences.getString("checkInLat","");
-                            lastLongitude = preferences.getString("checkInLng","");
-                        }
-                        else {
-                            lastLatitude = String.valueOf(lastLocation.getLatitude());
-                            lastLongitude = String.valueOf(lastLocation.getLongitude());
-                        }
 
 
 
-                        String checkOutTime = dateFormat1.format(new Date());
-
-                        CheckinCheckOutTable obj = CheckinCheckOutTable.findById(CheckinCheckOutTable.class, Long.valueOf(1));
-                        obj.isCheckOut = true;
-                        obj.isCheckIn = false;
-                        obj.checkOutLat = lastLatitude;
-                        obj.CheckOutLng = lastLongitude;
-                        obj.time = checkOutTime;
-                        obj.save();
-
-                        editor.putBoolean("IsCheckIn",false);
-                        editor.putBoolean("IsCheckOut",true);
-                        editor.putString("CheckOutTime",preferences.getString("OfficeTimeOut",""));
-                        editor.putString("lastLatitude",lastLatitude);
-                        editor.putString("lastLongitude",lastLongitude);
-                        editor.putString("CheckOutDay", dayFormat.format(new Date()));
-                        editor.apply();
-                        if(haveNetworkConnection()){
-                            obj.isSend = true;
-                            obj.save();
-                            try {
-
-
-
-                                //sendTime("0:00 0");
-                                UploadAutoCheckOut(checkOutTime,Double.parseDouble(lastLatitude),Double.parseDouble(lastLongitude));
-                                List<TraveledDistance> distances = TraveledDistance.listAll(TraveledDistance.class);
+                        if(checkinCheckOutTable.isCheckIn && !checkinCheckOutTable.isSend){
+                            if(!preferences.getString("CheckInDay","").equalsIgnoreCase(dateFormat1.format(new Date()))){
+                                UploadCheckIn(preferences.getString("CheckInTime",""));
+                                DistanceOnCheckIn();
                                 //TraveledDistance.deleteAll(TraveledDistance.class);
 
-                                AddLocationData.isCheckOut = true;
-
-                                //broadcaster.sendBroadcast(intent);
-
-
-                            }
-                            catch (Exception e){
-                        *//**//*
                             }
                         }
-                        else {
-                            obj.isSend = false;
-                            obj.save();
-                            CurrentPositionService.this.stopService(new Intent(CurrentPositionService.this,CurrentPositionService.class));
-                            CurrentPositionService.this.stopService(new Intent(CurrentPositionService.this,TrackingService.class));
-                        }
 
-
-                    }*/
-
+                    }
 
                 }
             }
@@ -458,6 +379,75 @@ public class CurrentPositionService extends Service {
         return haveConnectedWifi || haveConnectedMobile;
     }
 
+    public void UploadCheckIn(final String Time) {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        final CheckinCheckOutTable obj = CheckinCheckOutTable.findById(CheckinCheckOutTable.class, (long) 1);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+05"));
+
+
+
+
+        AndroidNetworking.post("http://www.swmapplication.com/API/check_in")
+                .addBodyParameter("id", preferences.getString("userId", ""))
+                .addBodyParameter("checkIn", Time)
+                .addBodyParameter("checkInLat",preferences.getString("checkInLat",""))
+                .addBodyParameter("checkInLng",preferences.getString("checkInLng",""))
+                .addBodyParameter("day",dateFormat.format(new Date()))
+                .addBodyParameter("battery",preferences.getString("battery",""))
+                .setTag("test")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+
+                        obj.isSend = false;
+                        obj.save();
+                        // handle error
+                    }
+                });
+
+
+    }
+
+    public void DistanceOnCheckIn() {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        AndroidNetworking.post("http://www.swmapplication.com/API/distanceAtCheckIn")
+                .addBodyParameter("id", preferences.getString("userId", ""))
+                .addBodyParameter("tour_id", preferences.getString("TourId", ""))
+                .setTag("test")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        // do anything with response
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        CheckinCheckOutTable obj = CheckinCheckOutTable.findById(CheckinCheckOutTable.class, (long) 1);
+
+                        obj.isSend = false;
+                        obj.save();
+                        // handle error
+                    }
+                });
+
+
+    }
     public void sendCurrentLocation(final String lat, final String lng){
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(CurrentPositionService.this);
 
@@ -482,42 +472,7 @@ public class CurrentPositionService extends Service {
                 });
 
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-                        //Toast.makeText(CurrentPositionService.this,"Current Location Sended", Toast.LENGTH_LONG ).show();//error.toString()
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        //Toast.makeText(CurrentPositionService.this,error.toString(), Toast.LENGTH_LONG ).show();//error.toString()
-                        //pDialog.hide();
-                    }
-                }){
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<String,String>();
-
-                map.put("latitude",lat);
-                map.put("longitude",lng);
-                map.put("id",preferences.getString("userId",""));
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(CurrentPositionService.this);
-        requestQueue.add(stringRequest);*/
     }
 
     public void UploadAutoCheckOut(final String Time, final double latitude, final double longitude){
@@ -552,56 +507,7 @@ public class CurrentPositionService extends Service {
 
 
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, CHECKOUT_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-
-                        editor.putString("isCheckOutSend","1");
-                        editor.apply();
-
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        editor.putString("isCheckOutSend","0");
-                        editor.apply();
-                        //Toast.makeText(CurrentPositionService.this,error.toString(), Toast.LENGTH_LONG ).show();//error.toString()
-                        //pDialog.hide();
-                    }
-                }){
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<String,String>();
-
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+05"));
-
-                map.put("checkOut",Time);
-                map.put("auto","Yes");
-                map.put("latitude",String.valueOf(latitude));
-                map.put("longitude",String.valueOf(longitude));
-                map.put("id",preferences.getString("userId",""));
-                map.put("day",dateFormat.format(new Date()));
-
-
-
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
     }
 
     void updateDistance(final String distance, final String allowance){
@@ -627,44 +533,7 @@ public class CurrentPositionService extends Service {
                     }
                 });
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, DISTANCE_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-
-
-//
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        //Toast.makeText(CurrentPositionService.this,"updateDistance Error", Toast.LENGTH_LONG ).show();//error.toString()
-                        //pDialog.hide();
-                    }
-                }){
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<String,String>();
-
-                map.put("id",preferences.getString("userId",""));
-                map.put("distance",distance);
-                map.put("allowance",allowance);
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
 
     }
 
@@ -691,46 +560,6 @@ public class CurrentPositionService extends Service {
                         // handle error
                     }
                 });
-
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, Distance_At_Tour_URL,
-                new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-
-
-//
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        //Toast.makeText(CurrentPositionService.this,"updateDistance Error", Toast.LENGTH_LONG ).show();//error.toString()
-                        //pDialog.hide();
-                    }
-                }){
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<String,String>();
-
-                map.put("id",preferences.getString("userId",""));
-                map.put("tour_id",preferences.getString("TourId",""));
-                map.put("distance",distance);
-                map.put("allowance",allowance);
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
 
     }
 
@@ -769,49 +598,7 @@ public class CurrentPositionService extends Service {
                                 // handle error
                             }
                         });
-                /*StringRequest stringRequest = new StringRequest(Request.Method.POST, SEND_COORINATES_URL,
-                        new Response.Listener<String>() {
 
-                            @Override
-                            public void onResponse(String response) {
-//
-                            }
-                        },
-
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                TraveledDistance forSendTrue = TraveledDistance.findById(TraveledDistance.class,obj.getId());
-                                forSendTrue.isSend = false;
-                                forSendTrue.save();
-
-                                //Toast.makeText(CurrentPositionService.this,"updateDistance Error", Toast.LENGTH_LONG ).show();//error.toString()
-                                //pDialog.hide();
-                            }
-                        }){
-
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String,String> map = new HashMap<String,String>();
-                        List<TraveledDistance> distances = TraveledDistance.listAll(TraveledDistance.class);
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+05"));
-
-                        map.put("id",preferences.getString("userId",""));
-                        map.put("date",dateFormat.format(new Date()));
-                        map.put("longitude", String.valueOf(obj.lng));
-                        map.put("latitude", String.valueOf(obj.lat));
-
-                        return map;
-                    }
-
-                };
-
-                int socketTimeout = 30000;
-                RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                stringRequest.setRetryPolicy(policy);
-                RequestQueue requestQueue = Volley.newRequestQueue(this);
-                requestQueue.add(stringRequest);*/
             }
 
         }
@@ -842,44 +629,7 @@ public class CurrentPositionService extends Service {
                     }
                 });
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, SEND_Time_For_Online_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-//
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //Toast.makeText(CurrentPositionService.this,"updateDistance Error", Toast.LENGTH_LONG ).show();//error.toString()
-                        //pDialog.hide();
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
-                dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+05"));
-
-                map.put("id", preferences.getString("userId", ""));
-                //map.put("time", time);
-                       *//* map.put("longitude", String.valueOf(obj.lng));
-                        map.put("latitude", String.valueOf(obj.lat));*//*
-
-                return map;
-            }
-
-        };
-
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
     }
 
 
